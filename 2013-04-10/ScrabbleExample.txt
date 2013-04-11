@@ -1,0 +1,110 @@
+Prove scrabble tile values.  Originally: based on distribution of letters on New York Times frontpage from the 1920's (when scrabble was invented).  Now: get letter distribution from 1000's of ebooks.  
+
+This example is based on 1 paragraph from one book:
+---------
+It was the best of times,
+it was the worst of times,
+it was the age of wisdom,
+it was the age of foolishness,
+it was the epoch of belief,
+it was the epoch of incredulity,
+it was the season of Light,
+it was the season of Darkness,
+it was the spring of hope,
+it was the winter of despair,
+we had everything before us,
+we had nothing before us,
+we were all going direct to Heaven,
+we were all going direct the other way--
+in short, the period was so far like the present period, that some of
+its noisiest authorities insisted on its being received, for good or for
+evil, in the superlative degree of comparison only.
+---------
+Name the book?
+
+Splitter
+  In = "Raw Input" 
+  Out = List of (K -> V)
+  K = line number, V = line
+------------------------------------------
+(It was the best of times,
+it was the worst of times,
+etc...) 
+-> 
+(1 -> It was the best of times,)
+(2 -> it was the worst of times,)
+etc...
+------------------------------------------
+
+Mapper 
+  In = (K -> V)
+  Out = List of (K' -> V')
+  K = line number, V = line, K' = letter, V' = count
+------------------------------------------
+(1 -> It was the best of times,) 
+-> 
+(a -> 1)
+(b -> 1)
+(e -> 3)
+(f -> 1)
+(h -> 1)
+(i -> 2)
+(m -> 1)
+(o -> 1)
+(s -> 3)
+(t -> 4)
+(w -> 1) 
+------------------------------------------
+(2 -> it was the worst of times,) 
+-> 
+(a -> 1)
+(e -> 2)
+(f -> 1)
+(h -> 1)
+(i -> 2)
+(m -> 1)
+(o -> 2)
+(r -> 1)
+(s -> 3)
+(t -> 4)
+(w -> 2)  
+------------------------------------------
+
+Shuffler 
+In = List of (K' -> V')
+Out = (K', List of V')
+K' = letter, V' = count
+------------------------------------------
+(a -> (1,1))
+(b -> (1))
+(e -> (3,2))
+(f -> (1,1))
+(h -> (1,1))
+(i -> (2,2))
+(m -> (1,1))
+(o -> (1,2))
+(r -> (1))
+(s -> (3,3))
+(t -> (4,4))
+(w -> (1,2)) 
+------------------------------------------
+
+Reducer 
+In = (K', List of V')
+Out = (K'', V'')
+K' = letter, V' = count, K'' = letter, V'' = sum
+------------------------------------------
+(a -> 2)
+(b -> 1)
+(e -> 5)
+(f -> 2)
+(h -> 2)
+(i -> 4)
+(m -> 2)
+(o -> 3)
+(r -> 1)
+(s -> 6)
+(t -> 8)
+(w -> 3) 
+------------------------------------------
+
